@@ -7,15 +7,15 @@ def test():
 	loop = asyncio.get_event_loop() #建立一個Event Loop
 
 	async def example1(): # 定義一個中間會被中斷的協程
-	    print("Start example1 coroutin.")
+	    print("Start example1 coroutine.")
 	    await asyncio.sleep(1) # 中斷協程一秒
 	    # 即註冊新的event: sleep() 結束; 對應的callback為執行以下尚未完成的部分
-	    print("Finish example1 coroutin.")
+	    print("Finish example1 coroutine.")
 
 	async def example2(): # 定義一個協程
-	    print("Start example2 coroutin.")
+	    print("Start example2 coroutine.")
 	    # do some process...
-	    print("Finish example2 coroutin.")
+	    print("Finish example2 coroutine.")
 
 	tasks = [ # 建立一個任務列表
 	    asyncio.ensure_future(example1()),
