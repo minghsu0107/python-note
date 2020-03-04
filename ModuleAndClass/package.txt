@@ -1,0 +1,72 @@
+模組用來存放函數，類別，或變數 （通常為唯讀的常數）, 但 python 可以將多個模組放在同一個目錄下做進一步的分類，這叫做 package. 例如下面的目錄結構
+
+mymod/
+  __init__.py  # 空的檔案, 代表 mymod/ 是一個 package
+  lib.py       # lib 模組定義了 Stack 及 Queue 類別
+  utils.py     # utils 模組定義一個函數 index_of
+main3.py
+
+由於 mymod/ 子目錄裡有一個名為 __init__.py 的 .py 檔，python 會將它視為一個 package，而目錄裡的 .py 檔就會被當成可以 import 的模組
+
+main3.py:
+
+# import mymod.lib
+# import mymod.utils
+from mymod.lib import Stack, Queue
+from mymod.utils import index_of
+
+def test():
+  # stk = mymod.lib.Stack() # constructor of class Stack
+  stk = Stack()
+
+  stk.push("Alice")
+  stk.push("Bob")
+  print("items:", stk.items(), "len:", stk.size())
+
+  # q = mymod.lib.Queue()  # constructor of class Queue
+  q = Queue()
+
+  q.push("Alice")
+  q.push("Bob")
+  q.push_front("Charlie")
+  print("items:", q.items(), "len:", q.size())
+
+  arr = [ 3, 1, 4, 1, 5, 9]
+  print(index_of(arr, 5))
+  print(index_of(arr, 8))
+
+if __name__ == "__main__":
+  test()
+
+
+package
+├── __init__.py
+├── subpackage1
+│   ├── __init__.py
+│   ├── moduleX.py
+│   └── moduleY.py
+├── subpackage2
+│   ├── __init__.py
+│   └── moduleZ.py
+└── moduleA.py
+
+現在假設 package/subpackage1/moduleX.py想要從其他 module 裡 import 一些東西，則使用下列語法([A]表 absolute import 範例；[R]表 relative import 範例):
+
+# Import 同一個 package 底下的 sibling module `moduleY`
+[A] from package.subpackage1 import moduleY
+[R] from . import moduleY
+[Error] import .moduleY
+
+# 從同一個 package 底下的 sibling module `moduleY` 中，
+# import `spam` 這個 function
+[A] from package.subpackage1.moduleY import spam
+[R] from .moduleY import spam
+
+# 從隔壁 package 底下的 module `moduleZ` 中，
+# import `eggs` 這個 function
+[A] from package.subpackage2.moduleZ import eggs
+[R] from ..subpackage2.moduleZ import eggs
+
+# Import parent package 底下的 module `moduleA`
+[A] from package import moduleA
+[R] from .. import moduleA 或 from ... package import moduleA
