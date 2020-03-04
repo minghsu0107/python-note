@@ -4,4 +4,6 @@ __pycache__/
 bin/
 include/
 lib/
-virtualenv.txt
+*.txt
+
+homework-physics/
