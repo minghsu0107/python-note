@@ -1,6 +1,6 @@
 import ctypes
 from my_extern.extern import run
-   
+
 
 class Wrapper:
     def __init__(self, func_file_name, mes):
@@ -33,9 +33,8 @@ class Wrapper:
         nlst = [x for x in cb_arr]
         return nlst
 
+
 if __name__ == '__main__':
     mes = "hello"
     wp = Wrapper("my_clib/extern_c_test2.cpp", mes)
     print(wp.sort([2, 1, 4, 3, 7, 11, 99, 6, 6], STL=False))
-
-

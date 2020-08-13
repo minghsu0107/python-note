@@ -3,12 +3,13 @@ class Some:
         def __init__(self, length):
             self.length = length
             self.number = -1
+
         def __next__(self):
             self.number = self.number + 1
             if self.number == self.length:
                 raise StopIteration
             return self.number
-    
+
     def __init__(self, length):
         self.length = length
 

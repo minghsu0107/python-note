@@ -1,14 +1,15 @@
+import asyncio
+import json
+import aiohttp
+import requests
+import logging
+import os
 from dotenv import load_dotenv
 load_dotenv()
 
-import os
-import logging
-import requests
-import aiohttp
-import json
-import asyncio
 
 API_ENTPOINT = os.getenv('API_ENTPOINT')
+
 
 def blockingRequest():
     payload = {}
@@ -34,6 +35,7 @@ def blockingRequest():
     except requests.exceptions.RequestException as err:
         print("An Unknown Error occurred" + repr(err))
         raise
+
 
 async def main():
     payload = {}

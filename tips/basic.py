@@ -9,8 +9,8 @@ str1 = 'he says "hello"'
 print(str1)
 
 print(100, "hi", 60)
-print(100, "hi", 60, sep="&") 
-print(100, 60, sep="&", end="") #do not change line at last
+print(100, "hi", 60, sep="&")
+print(100, 60, sep="&", end="")  # do not change line at last
 print('')
 print("%3s  %2d  %3d  %3d  %3d" % ("ming", 1, 100, 95, 7))
 
@@ -24,8 +24,8 @@ print(type(56))
 print(type(True))
 print(type("hello"))
 
-num1 = 5 + 7.8 #12.8, float
-num2 = 5 + True #6, int
+num1 = 5 + 7.8  # 12.8, float
+num2 = 5 + True  # 6, int
 
 num3 = 34 + int("67")
 score = 60

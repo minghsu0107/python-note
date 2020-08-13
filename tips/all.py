@@ -7,6 +7,7 @@ class Solution(object):
         """
         return all(matrix[row+1][1:] == matrix[row][:-1] for row in range(len(matrix)-1))
 
+
 def all(iterable):
     for element in iterable:
         if not element:

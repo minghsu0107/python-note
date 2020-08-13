@@ -1,7 +1,7 @@
 from collections import deque
 d = deque('abc')
 for element in d:
-	print(element.upper())
+    print(element.upper())
 
 d.append('j')
 d.appendleft('i')

@@ -1,11 +1,11 @@
+import string
 ch1 = 'a'
 ch2 = '7'
 
-print(ch1 in '0123456789') #False
+print(ch1 in '0123456789')  # False
 
-print(ch2 in '0123456789') #True
+print(ch2 in '0123456789')  # True
 
-import string
 input_str = input()
 lower, upper, digit = 0, 0, 0
 for c in input_str:

@@ -1,3 +1,4 @@
+import matplotlib.gridspec as gridspec
 import matplotlib.pyplot as plt
 
 plt.figure()
@@ -17,7 +18,6 @@ ax4.set_ylabel('ax4_y')
 
 plt.show()
 
-import matplotlib.gridspec as gridspec
 
 plt.figure()
 gs = gridspec.GridSpec(3, 3)

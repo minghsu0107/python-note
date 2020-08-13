@@ -14,15 +14,15 @@ if lsa != 2:
 
     sys.exit(1)
 
-try:                  ###先試一下這個區塊
+try:  # 先試一下這個區塊
     minutes = int(sa[1])
-except ValueError:    ###當值有錯誤時
-    print ("Invalid numeric value (%s) for minutes" % sa[1])
-    print ("Should be an integer >= 0")
+except ValueError:  # 當值有錯誤時
+    print("Invalid numeric value (%s) for minutes" % sa[1])
+    print("Should be an integer >= 0")
     sys.exit(1)
 
 if minutes < 0:
-    print( "Invalid value for minutes, should be >= 0")
+    print("Invalid value for minutes, should be >= 0")
     sys.exit(1)
 
 seconds = minutes * 60
@@ -34,12 +34,12 @@ else:
 
 try:
     if minutes > 0:
-        print( "Sleeping for " + str(minutes) + unit_word)
+        print("Sleeping for " + str(minutes) + unit_word)
         sleep(seconds)
-    print( "Wake up")
+    print("Wake up")
     for i in range(5):
-        print( chr(7),)
+        print(chr(7),)
         sleep(1)
 except KeyboardInterrupt:
-    print( "Interrupted by user")
+    print("Interrupted by user")
     sys.exit(1)

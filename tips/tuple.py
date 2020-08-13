@@ -21,13 +21,13 @@ book = ("#123", "Python Programming", 250)
 print(id, title, price)
 
 a = [(1, 'a'), (2, 'c'), (2, 'b'), (3, 'c'), (2, 'd')]
-print(max(a, key = lambda x: x[0]))
+print(max(a, key=lambda x: x[0]))
 
 # tuple基本操作
-## 初始化一个tuple类型变量z
+# 初始化一个tuple类型变量z
 z = ("a", "b", "c", "d", "e")
 print(z)
 
-## 读取z中的元素，与list类似
+# 读取z中的元素，与list类似
 print(z[0])
 print(z[-1])

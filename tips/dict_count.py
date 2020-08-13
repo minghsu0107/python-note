@@ -20,7 +20,7 @@ def wordCount(data):
     """
     re = {}
     for i in data:
-        re[i] = re.get(i, 0) + 1 # if key does not exist, set it as default(0)
+        re[i] = re.get(i, 0) + 1  # if key does not exist, set it as default(0)
     return re
 
 

@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-# linspace(start, stop, 21) returns a list 
+# linspace(start, stop, 21) returns a list
 # with 21 equidistant numbers in [start, stop]
 x = np.linspace(0, 10, 21)
 plt.plot(x, x, 'r^')

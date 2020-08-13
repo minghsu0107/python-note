@@ -17,24 +17,24 @@ print(df[df['year'].isin([2014])])
 df.set_index('month', inplace=True)
 for idx in df.index:
     print(idx)
-print(list(df.index)) # [1, 4, 7, 10]
+print(list(df.index))  # [1, 4, 7, 10]
 
-print(df.loc[10]['year']) # 2014
-print(df.loc[10, 'year']) # 2014
+print(df.loc[10]['year'])  # 2014
+print(df.loc[10, 'year'])  # 2014
 
-ser = df.loc[[4, 7], 'year'] # returns pd.Series (it's iterable)
+ser = df.loc[[4, 7], 'year']  # returns pd.Series (it's iterable)
 '''
 month
 4     2014
 7     2013
 Name: year, dtype: int64
 '''
-print(ser[7]) # 2013
+print(ser[7])  # 2013
 
-print(df.iloc[0]['year']) # 2012
-print(df.iloc[0]) # returns pd.Series
+print(df.iloc[0]['year'])  # 2012
+print(df.iloc[0])  # returns pd.Series
 
-print(list(df.iloc[0])) # [2012, 55]
+print(list(df.iloc[0]))  # [2012, 55]
 
 df = pd.DataFrame({'key': ['K0', 'K1', 'K2', 'K3', 'K4', 'K5'],
                    'A': ['A0', 'A1', 'A2', 'A3', 'A4', 'A5']})
@@ -45,11 +45,12 @@ other = pd.DataFrame({'key': ['K0', 'K1', 'K2'],
 # use join when you want to join by index
 # DataFrame.join(self, other, on=None, how='left', lsuffix='', rsuffix='', sort=False) -> DataFrame
 # on=None: joins index-on-index by default
-# sort: Order result DataFrame lexicographically by the join key. 
+# sort: Order result DataFrame lexicographically by the join key.
 # If False, the order of the join key depends on the join type (how keyword).
 print(df.join(other, lsuffix='_caller', rsuffix='_other'))
 print(df.set_index('key').join(other.set_index('key')))
-print(df.join(other.set_index('key'), on='key')) # preserves the original DataFrame’s index
+# preserves the original DataFrame’s index
+print(df.join(other.set_index('key'), on='key'))
 '''
 df:
   key   A
@@ -94,7 +95,7 @@ sales = {'Tony': 103,
          'Randy': 380,
          'Ellen': 101,
          'Fred': 82
-        }
+         }
 # Dataframe of all employees and the region they work in
 region = {'Tony': 'West',
           'Sally': 'South',
@@ -105,11 +106,11 @@ region = {'Tony': 'West',
           'Fred': np.nan,
           'Mo': 'East',
           'HanWei': np.nan,
-         }
+          }
 
-sales_df = pd.DataFrame.from_dict(sales, orient='index', 
+sales_df = pd.DataFrame.from_dict(sales, orient='index',
                                   columns=['sales'])
-region_df = pd.DataFrame.from_dict(region, orient='index', 
+region_df = pd.DataFrame.from_dict(region, orient='index',
                                    columns=['region'])
 print(sales_df)
 print(region_df)
@@ -133,7 +134,8 @@ HanWei    NaN
 '''
 # use merge when you want to join on columns other than index
 # left_index=True: join on left index, same for right_index=True
-joined_df_merge = region_df.merge(sales_df, how='left', left_index=True, right_index=True)
+joined_df_merge = region_df.merge(
+    sales_df, how='left', left_index=True, right_index=True)
 print(joined_df_merge)
 # same as region_df.join(sales_df, how='left') in here
 '''
@@ -162,7 +164,7 @@ Ellen  South  101.0
 '''
 
 grouped_df = joined_df_merge.groupby(by='region').sum()
-grouped_df.reset_index(inplace=True) # set index to 0, 1, 2...
+grouped_df.reset_index(inplace=True)  # set index to 0, 1, 2...
 print(grouped_df)
 '''
   region  sales
@@ -172,10 +174,10 @@ print(grouped_df)
 3   West  103.0
 '''
 
-employee_contrib = joined_df_merge.merge(grouped_df, how='left', 
-                                         left_on='region', 
+employee_contrib = joined_df_merge.merge(grouped_df, how='left',
+                                         left_on='region',
                                          right_on='region',
-                                         suffixes=('','_region'))
+                                         suffixes=('', '_region'))
 
 print(employee_contrib)
 '''
@@ -193,9 +195,10 @@ print(employee_contrib)
 employee_contrib = employee_contrib.set_index(joined_df_merge.index)
 employee_contrib = employee_contrib.dropna(subset=['region'])
 employee_contrib = employee_contrib.fillna({'sales': 0})
-employee_contrib['%_of_sales'] = employee_contrib['sales']/employee_contrib['sales_region']
-print(employee_contrib[['region', 'sales', '%_of_sales']]\
-      .sort_values(by=['region','%_of_sales']))
+employee_contrib['%_of_sales'] = employee_contrib['sales'] / \
+    employee_contrib['sales_region']
+print(employee_contrib[['region', 'sales', '%_of_sales']]
+      .sort_values(by=['region', '%_of_sales']))
 '''
        region  sales  %_of_sales
 Mo       East    0.0    0.000000

@@ -1,20 +1,20 @@
 s = "hello"
 print(len(s))
 
-s[1]   ## 'e'
-s[1:3] ## 'el'
-s[1:]  ## 'ello'
-s[:3]  ## 'hel'
+s[1]  # 'e'
+s[1:3]  # 'el'
+s[1:]  # 'ello'
+s[:3]  # 'hel'
 
 ord('a')
 chr(97)
 
 print(s.replace('ello', 'i'))  # replace() returns a new string
-print(s) ## does not change, since string is immutable
+print(s)  # does not change, since string is immutable
 
 x = '  A  '
 print(x.strip())
-print(x) ## immutable
+print(x)  # immutable
 
 a = "ab"
 b = "cd"
@@ -28,7 +28,7 @@ print("MuQ" * 10)
 
 x = "-"
 d = "123456"
-e = ['1', '2', '3'] # Warning : list裡都要是字串
+e = ['1', '2', '3']  # Warning : list裡都要是字串
 print(x.join(d))
 print(x.join(e))
 
@@ -36,7 +36,7 @@ print(x.join(e))
 a = "rilak achine pie arbuz"
 print(a.find("e "))
 # 11
-print(a.find("e ",12)) #故意跳過第一個
+print(a.find("e ", 12))  # 故意跳過第一個
 # 15
 
 a = "Hello world"
@@ -44,7 +44,7 @@ print(a[:a.find(" ")])
 # "Hello"
 print(a[a.find(" ")+1:])
 # "world"
-print(a[::-1]) # 翻轉 [::-1]會製造一個新的
+print(a[::-1])  # 翻轉 [::-1]會製造一個新的
 # "dlrow olleH"
 print(a[::-2])
 
@@ -61,16 +61,16 @@ print(a[::-2])
 string = "10 : 10 : 10"
 print("{}h {}m {}s".format(*string.split(" : ")))
 
-print("{} {}".format(1,2))
+print("{} {}".format(1, 2))
 # 1 2
-print("{0} {1}".format(1,2))
+print("{0} {1}".format(1, 2))
 # 1 2
-print("{1} {0}".format(1,2))
+print("{1} {0}".format(1, 2))
 # 2 1
 
 s = ("this is a very"
      "long string too"
      "for sure ..."
-    )
+     )
 print(s)
 # 'this is a verylong string toofor sure ...'

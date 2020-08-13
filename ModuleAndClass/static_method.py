@@ -3,4 +3,5 @@ class MyClass(object):
     def the_static_method(x):
         print(x)
 
-MyClass.the_static_method(2) # outputs 2
+
+MyClass.the_static_method(2)  # outputs 2

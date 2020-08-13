@@ -37,4 +37,3 @@ for line in os.listdir(input_path):
         size = os.stat(os.path.join(input_path, line)).st_size
         line = '%10d  %s' % (size, line)
     print(line)
-

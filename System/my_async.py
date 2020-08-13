@@ -4,20 +4,20 @@
 # 這個函數一執行，Event Loop就會永遠執行不會被關閉，除非在程式中出現loop.stop()就停止
 def test():
     import asyncio
-    loop = asyncio.get_event_loop() #建立一個Event Loop
+    loop = asyncio.get_event_loop()  # 建立一個Event Loop
 
-    async def example1(idx): # 定義一個中間會被中斷的協程
+    async def example1(idx):  # 定義一個中間會被中斷的協程
         print(f"Start example1 coroutine (idx: {idx})")
-        await asyncio.sleep(1) # 中斷協程一秒
+        await asyncio.sleep(1)  # 中斷協程一秒
         # 即註冊新的event: sleep() 結束; 對應的callback為執行以下尚未完成的部分
         print(f"finish example1 coroutine (idx: {idx})")
 
-    async def example2(idx): # 定義一個協程
+    async def example2(idx):  # 定義一個協程
         print(f"Start example2 coroutine (idx: {idx})")
         # do some process...
         print(f"finish example2 coroutine (idx: {idx})")
 
-    tasks = [ # 建立一個任務列表
+    tasks = [  # 建立一個任務列表
         asyncio.ensure_future(example1(1)),
         asyncio.ensure_future(example1(2)),
         asyncio.ensure_future(example2(1)),
@@ -40,10 +40,11 @@ def test():
     # finish example1 coroutine (idx: 1)
     # finish example1 coroutine (idx: 2)
 
+
 def test2():
     import asyncio
     loop = asyncio.get_event_loop()
-    
+
     async def example1(idx):
         print(f"Start example1 coroutine (idx: {idx})")
         await asyncio.sleep(1)
@@ -56,8 +57,8 @@ def test2():
         return f'example 2, res: {idx}'
 
     tasks = [
-        example1(1), 
-        example1(2), 
+        example1(1),
+        example1(2),
         example2(1),
         example2(2)
     ]
@@ -69,7 +70,6 @@ def test2():
 
 
 if __name__ == "__main__":
-    #test()
+    # test()
     # ['example 1, res: 1', 'example 1, res: 2', 'example 2, res: 1', 'example 2, res: 2']
     print(test2())
-

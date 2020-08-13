@@ -6,9 +6,12 @@ import time
 import threading
 
 logger_format = '%(asctime)s:%(threadName)s:%(message)s'
-logging.basicConfig(format=logger_format, level=logging.INFO, datefmt="%H:%M:%S")
+logging.basicConfig(format=logger_format,
+                    level=logging.INFO, datefmt="%H:%M:%S")
 
-r_lists = [[np.random.randint(500000) for _ in range(3000)] for _ in range(1000)]
+r_lists = [[np.random.randint(500000) for _ in range(3000)]
+           for _ in range(1000)]
+
 
 def merge(l_1, l_2):
     out = []
@@ -29,6 +32,7 @@ def merge(l_1, l_2):
                 break
     return out
 
+
 def merge_sort(l):
     if len(l) == 1:
         return l
@@ -38,10 +42,12 @@ def merge_sort(l):
     del l_1, l_2
     return out
 
-# By default, the number of processes 
+
+# By default, the number of processes
 # is equal to the number of processors on the machine.
 if __name__ == '__main__':
     logging.info("Starting Sorting")
     with cf.ProcessPoolExecutor() as executor:
-        sorted_lists_futures = [executor.submit(merge_sort, r_list) for r_list in r_lists]
+        sorted_lists_futures = [executor.submit(
+            merge_sort, r_list) for r_list in r_lists]
     logging.info("Sorting Completed")

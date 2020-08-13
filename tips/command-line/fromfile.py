@@ -22,7 +22,7 @@ my_parser.add_argument('e',
 
 my_parser.add_argument('-v',
                        '--verbose',
-                       action='store_true', # there is also 'store_false'
+                       action='store_true',  # there is also 'store_false'
                        help='an optional argument')
 
 # access by args.number

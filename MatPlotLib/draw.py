@@ -1,13 +1,13 @@
 import matplotlib.pyplot as plt
-listx = [1, 5, 7, 9, 13 , 16]
+listx = [1, 5, 7, 9, 13, 16]
 listy = [15, 50, 80, 40, 70, 50]
 
-## ls or linestyle: "-", "--", "-.", ":"
+# ls or linestyle: "-", "--", "-.", ":"
 plt.plot(listx, listy, color="red", lw="5.0", ls="--", label="food")
 plt.legend()
 plt.show()
 
-listx = [1, 5, 7, 9, 13 , 16]
+listx = [1, 5, 7, 9, 13, 16]
 listy = [15, 50, 80, 40, 70, 50]
 listx1 = [2, 6, 8, 11, 14, 16]
 listy1 = [10, 40, 30, 50, 80, 60]

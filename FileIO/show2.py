@@ -6,13 +6,13 @@ file.close()
 
 name = input('請輸入檔名：')
 with open(name, 'r', encoding='UTF-8') as file:
-	for line in file:
-		print(line, end='')
+    for line in file:
+        print(line, end='')
 
 name = input('請輸入檔名：')
-with open(name, 'r', encoding='UTF-8') as file: ### file.close after "with block"
-	while True:
-	  line = file.readline()
-	  if line == '':
-	    break
-	  print(line, end="")
+with open(name, 'r', encoding='UTF-8') as file:  # file.close after "with block"
+    while True:
+        line = file.readline()
+        if line == '':
+            break
+        print(line, end="")

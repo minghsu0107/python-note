@@ -1,3 +1,4 @@
+from collections import defaultdict
 colors = ['red', 'green', 'red', 'blue', 'green', 'red']
 d = {}
 for color in colors:
@@ -6,16 +7,16 @@ for color in colors:
     d[color] += 1
 print(d)
 
-from collections import defaultdict
 d = defaultdict(int)
 for color in colors:
     d[color] += 1
 print(d)
 
-### defaultdict(default_factory)會産生一個以default_factory為基本的dictionary, 
-### 也就是key不需要存在這個dictionary當中, 它的d[key]值便會是default_factory這個type的預設值(int為0).
+# defaultdict(default_factory)會産生一個以default_factory為基本的dictionary,
+# 也就是key不需要存在這個dictionary當中, 它的d[key]值便會是default_factory這個type的預設值(int為0).
 
-names = ['raymond', 'rachel', 'matthew', 'roger', 'betty', 'melissa', 'judith', 'charlie']
+names = ['raymond', 'rachel', 'matthew', 'roger',
+         'betty', 'melissa', 'judith', 'charlie']
 d = {}
 for name in names:
     key = len(name)
