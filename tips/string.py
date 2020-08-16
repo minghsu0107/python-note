@@ -13,7 +13,8 @@ print(s.replace('ello', 'i'))  # replace() returns a new string
 print(s)  # does not change, since string is immutable
 
 x = '  A  '
-print(x.strip())
+print(x.strip())  # 'A'
+print(x.rstrip())  # '  A'
 print(x)  # immutable
 
 a = "ab"
