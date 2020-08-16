@@ -1,12 +1,23 @@
-# Import the extension module hello.
 import timeit
 
 
-def test_import():
+def test_basic():
     import cy_optimized
 
     # Call the print_result method
     cy_optimized.print_result(23.0)
+
+    my_dict = {'a': [1, 2, 3], 'b': [4, 5], 'c': [7, 1, 2]}
+    # remember to convert all python str to bytes
+    input_dict = {key.encode('utf-8'): val for key, val in my_dict.items()}
+    print(cy_optimized.compute_dict(input_dict))  # 13
+
+    my_dict['z'] = [5, 6]
+    input_dict = {key.encode('utf-8'): val for key, val in my_dict.items()}
+    print(cy_optimized.compute_dict(input_dict))  # 11
+
+    my_list = [1, 2, 3]
+    print(cy_optimized.compute_list(my_list))  # [0, 1, 2, 3, 4, 5]
     print()
 
 
@@ -50,35 +61,49 @@ gg = np.array([[1],[2],[1]], dtype=np.int)
     r_cy3 = cy3.repeat(repeat, number)
     best_cy3, worse_cy3 = min(r_cy3), max(r_cy3)
 
-    print(f"Python: {number} loops, best of {repeat}: {best_py:.3g} seconds per loop, \
-            worse of {repeat}: {worse_py:.3g} seconds per loop\n")
+    print(
+        f"Python: {number} loops, best of {repeat}: {best_py:.3g} seconds per loop")
+    print(f"worse of {repeat}: {worse_py:.3g} seconds per loop\n")
 
-    print(f"Cython 1: {number} loops, best of {repeat}: {best_cy1:.3g} seconds per loop, \
-            worse of {repeat}: {worse_cy1:.3g} seconds per loop\n")
+    print(
+        f"Cython 1: {number} loops, best of {repeat}: {best_cy1:.3g} seconds per loop")
+    print(f"worse of {repeat}: {worse_cy1:.3g} seconds per loop\n")
 
-    print(f"Cython 2: {number} loops, best of {repeat}: {best_cy2:.3g} seconds per loop, \
-            worse of {repeat}: {worse_cy2:.3g} seconds per loop\n")
+    print(
+        f"Cython 2: {number} loops, best of {repeat}: {best_cy2:.3g} seconds per loop")
+    print(f"worse of {repeat}: {worse_cy2:.3g} seconds per loop\n")
 
-    print(f"Cython 3: {number} loops, best of {repeat}: {best_cy3:.3g} seconds per loop, \
-            worse of {repeat}: {worse_cy3:.3g} seconds per loop\n")
+    print(
+        f"Cython 3: {number} loops, best of {repeat}: {best_cy3:.3g} seconds per loop")
+    print(f"worse of {repeat}: {worse_cy3:.3g} seconds per loop\n")
 
 
 def test_generic_multithread():
     import numpy as np
     import cy_optimized
 
-    array_1 = np.random.uniform(0, 1000, size=(30, 20)).astype(np.intc)
-    array_2 = np.random.uniform(0, 1000, size=(30, 20)).astype(np.intc)
+    # np.intc: c int
+    # np.int: generic
+    array_1 = np.random.uniform(0, 1000, size=(
+        5, 20)).astype(np.intc)
+    array_2 = np.random.uniform(0, 1000, size=(
+        5, 20)).astype(np.intc)
     a = 4
     b = 3
     c = 9
     print(cy_optimized.compute(array_1, array_2, a, b, c).dtype)  # int32
+    print(cy_optimized.compute(array_1.astype(np.int),
+                               array_2.astype(np.int), a, b, c).dtype)  # int64
+    print(cy_optimized.compute(array_1.astype(np.float),
+                               array_2.astype(np.float), a, b, c).dtype)  # float64
     print(cy_optimized.compute(array_1.astype(np.double),
                                array_2.astype(np.double), a, b, c).dtype)  # float64
+    print(cy_optimized.compute(array_1.astype(np.int64),
+                               array_2.astype(np.int64), a, b, c).dtype)  # int64
 
 
 def main():
-    test_import()
+    test_basic()
     test_for_loop_speed()
     # repeat 10 times, 1000 times through the loop
     test_numpy_best(20, 5000)

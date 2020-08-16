@@ -1,7 +1,16 @@
 from cython.parallel import prange, threadid
 import numpy as np
-from libc.stdio cimport printf
+
 from libc.math cimport pow
+from libc.stdlib cimport malloc, free
+from libc.stdio cimport printf
+
+# import cpp stdlib
+# from libcpp.map cimport map as cpp_map
+from libcpp.unordered_map cimport unordered_map as cpp_map
+from libcpp.string cimport string
+from libcpp.vector cimport vector
+from cython.operator cimport dereference, preincrement
 
 # "cimport" is used to import special compile-time information
 # about the numpy module (this is stored in a file numpy.pxd which is
@@ -24,11 +33,65 @@ cpdef print_result(double x):
 
 
 cpdef int test_for_loop(int x):
-    cpdef int y = 0
-    cpdef int i
+    cdef int y = 0
+    cdef int i
     for i in range(x):
         y += i
     return y
+
+cpdef int compute_dict(input_dict: dict):
+    # the following conversion has an computational cost to it
+    # and must be done with the GIL. Depending on your design
+    # you might be able to ensure it's only done once so that the
+    # cost doesn't matter much
+    cdef cpp_map[string, vector[int]] m = input_dict
+
+    cdef string my_key = b'z'
+    cdef int my_val = 5
+    with nogil:
+        if m.find(my_key) == end:
+            m[my_key].push_back(my_val)
+        else:
+            m.erase(my_key)
+
+    # cdef statements can't go inside nogil, but much of the work can
+    cdef cpp_map[string, vector[int]].iterator it = m.begin()
+    cdef cpp_map[string, vector[int]].iterator end = m.end()
+
+    cdef int total_length = 0
+
+    with nogil:  # all  this stuff can now go inside nogil
+        while it != end:
+            dereference(it).second.push_back(3)
+            total_length += dereference(it).second.size()
+            preincrement(it)
+
+        return total_length
+
+
+def compute_list(a: list):
+
+    cdef int n = len(a)
+    cdef int * my_ints
+
+    my_ints = <int * >malloc(n * cython.sizeof(int))
+    if my_ints is NULL:
+        raise MemoryError()
+
+    for i in range(n):
+        my_ints[i] = a[i]
+
+    cdef int val = 0
+    cdef int x
+    with nogil:
+        # Once you convert all of your Python types to C types,
+        # then you can release the GIL and do the real work
+        for x in range(n):
+            val += my_ints[x]
+        free(my_ints)
+
+    # obtain gil and return python object
+    return [i for i in range(val)]
 
 
 # We now need to fix a datatype for our arrays. I've used the variable
@@ -91,19 +154,21 @@ def naive_convolve1(np.ndarray[DTYPE_t, ndim=2] f, np.ndarray[DTYPE_t, ndim=2] g
     # datatype size, it will simply wrap around like in C, rather than raise
     # an error like in Python.
     cdef DTYPE_t value
-    for x in range(xmax):
-        for y in range(ymax):
-            s_from = max(smid - x, -smid)
-            s_to = min((xmax - x) - smid, smid + 1)
-            t_from = max(tmid - y, -tmid)
-            t_to = min((ymax - y) - tmid, tmid + 1)
-            value = 0
-            for s in range(s_from, s_to):
-                for t in range(t_from, t_to):
-                    v = x - smid + s
-                    w = y - tmid + t
-                    value += g[smid - s, tmid - t] * f[v, w]
-            h[x, y] = value
+    with nogil:
+        for x in range(xmax):
+            for y in range(ymax):
+                s_from = max(smid - x, -smid)
+                s_to = min((xmax - x) - smid, smid + 1)
+                t_from = max(tmid - y, -tmid)
+                t_to = min((ymax - y) - tmid, tmid + 1)
+                value = 0
+                for s in range(s_from, s_to):
+                    for t in range(t_from, t_to):
+                        v = x - smid + s
+                        w = y - tmid + t
+                        value += g[smid - s, tmid - t] * f[v, w]
+                h[x, y] = value
+    # return python object: should acquire gil first
     return h
 
 
@@ -129,19 +194,20 @@ def naive_convolve2(DTYPE_t[:, :] f, DTYPE_t[:, :] g):
     cdef int s_from, s_to, t_from, t_to
 
     cdef DTYPE_t value
-    for x in range(xmax):
-        for y in range(ymax):
-            s_from = max(smid - x, -smid)
-            s_to = min((xmax - x) - smid, smid + 1)
-            t_from = max(tmid - y, -tmid)
-            t_to = min((ymax - y) - tmid, tmid + 1)
-            value = 0
-            for s in range(s_from, s_to):
-                for t in range(t_from, t_to):
-                    v = x - smid + s
-                    w = y - tmid + t
-                    value += g[smid - s, tmid - t] * f[v, w]
-            h[x, y] = value
+    with nogil:
+        for x in range(xmax):
+            for y in range(ymax):
+                s_from = max(smid - x, -smid)
+                s_to = min((xmax - x) - smid, smid + 1)
+                t_from = max(tmid - y, -tmid)
+                t_to = min((ymax - y) - tmid, tmid + 1)
+                value = 0
+                for s in range(s_from, s_to):
+                    for t in range(t_from, t_to):
+                        v = x - smid + s
+                        w = y - tmid + t
+                        value += g[smid - s, tmid - t] * f[v, w]
+                h[x, y] = value
     return h
 
 
@@ -166,19 +232,20 @@ def naive_convolve3(object[DTYPE_t, ndim=2] f, object[DTYPE_t, ndim=2] g):
     cdef int s_from, s_to, t_from, t_to
 
     cdef DTYPE_t value
-    for x in range(xmax):
-        for y in range(ymax):
-            s_from = max(smid - x, -smid)
-            s_to = min((xmax - x) - smid, smid + 1)
-            t_from = max(tmid - y, -tmid)
-            t_to = min((ymax - y) - tmid, tmid + 1)
-            value = 0
-            for s in range(s_from, s_to):
-                for t in range(t_from, t_to):
-                    v = x - smid + s
-                    w = y - tmid + t
-                    value += g[smid - s, tmid - t] * f[v, w]
-            h[x, y] = value
+    with nogil:
+        for x in range(xmax):
+            for y in range(ymax):
+                s_from = max(smid - x, -smid)
+                s_to = min((xmax - x) - smid, smid + 1)
+                t_from = max(tmid - y, -tmid)
+                t_to = min((ymax - y) - tmid, tmid + 1)
+                value = 0
+                for s in range(s_from, s_to):
+                    for t in range(t_from, t_to):
+                        v = x - smid + s
+                        w = y - tmid + t
+                        value += g[smid - s, tmid - t] * f[v, w]
+                h[x, y] = value
     return h
 
 
@@ -186,7 +253,7 @@ def naive_convolve3(object[DTYPE_t, ndim=2] f, object[DTYPE_t, ndim=2] g):
 # It generates multiple function declarations at compile time,
 # and then chooses the right one at run-time
 ctypedef fused my_type:
-    int
+    int  # c int, can be 32 bit or 64 bit
     double
     cython.longlong
 
@@ -216,15 +283,15 @@ def compute(my_type[:, ::1] array_1, my_type[:, ::1] array_2, my_type a, my_type
 
     cdef my_type tmp
     cdef Py_ssize_t x, y
-    # cdef int thread_id = -1
+    cdef int thread_id = -1
 
     # We use prange here.
     # OpenMP automatically starts a thread pool and distributes the work according to the schedule used
     # Variables assigned to in a parallel with block will be private and unusable after the block
     # If num_threads not given, OpenMP will decide how many threads to use
     for x in prange(x_max, nogil=True, schedule='dynamic', num_threads=None):
-        #thread_id = threadid()
-        #printf("Thread ID: %d\n", thread_id)
+        thread_id = threadid()
+        printf("Thread ID: %d\n", thread_id)
 
         for y in range(y_max):
 
