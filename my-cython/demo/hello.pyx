@@ -8,6 +8,14 @@ cdef double square_and_add(double x):
     """
     return pow(x, 2.0) + x
 
-cpdef print_result (double x):
+cpdef print_result(double x):
     """This is a cpdef function that can be called from Python."""
     print("({} ^ 2) + {} = {}".format(x, x, square_and_add(x)))
+
+
+cpdef int test_for_loop_cy(int x):
+    cpdef int y = 0
+    cpdef int i
+    for i in range(x):
+        y += i
+    return y
