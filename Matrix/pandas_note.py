@@ -4,20 +4,30 @@ import pandas as pd
 df = pd.DataFrame({'pre_month': [1, 4, 7, 10],
                    'pre_year': [2012, 2014, 2013, 2014],
                    'pre_sale': [55, 40, 84, 31]})
+'''
+   pre_month  pre_year  pre_sale
+0          1      2012        55
+1          4      2014        40
+2          7      2013        84
+3         10      2014        31
+'''
 
 df.columns = df.columns.str.replace('^pre_', '')
+
+print(df[df['year'].isin([2014])])
 '''
    month  year  sale
 1      4  2014    40
 3     10  2014    31
 '''
 
-print(df[df['year'].isin([2014])])
-
 df.set_index('month', inplace=True)
 for idx in df.index:
     print(idx)
 print(list(df.index))  # [1, 4, 7, 10]
+
+# return iloc indices
+print(np.where(df.index >= 7)[0])  # np.array([2, 3])
 
 print(df.loc[10]['year'])  # 2014
 print(df.loc[10, 'year'])  # 2014
