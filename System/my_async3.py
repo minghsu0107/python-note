@@ -34,7 +34,10 @@ async def send_req(idx, url):
     # register a new event: requests.get(url) ends;
     # python雖然因為GIL，並不能用多核心來同時跑多個線程，
     # 但線程並不會被網路io所阻塞，所以loop.run_in_executor利用這個特性把request.get包裝成一個非阻塞的Future對象
-    res = await loop.run_in_executor(_executor, requests.get, url)
+    s = requests.Session()
+    # headers = {'content-type': 'application/json'}
+    # s.headers.update(headers)
+    res = await loop.run_in_executor(_executor, s.get, url)
     # callback:
     _diff = time.time() - _st
     print(
