@@ -46,6 +46,15 @@ print(df.iloc[0])  # returns pd.Series
 
 print(list(df.iloc[0]))  # [2012, 55]
 
+print(df[df['year'].map(lambda row: row in {2013, 2014})])
+'''
+       year  sale
+month            
+4      2014    40
+7      2013    84
+10     2014    31
+'''
+
 df = pd.DataFrame({'key': ['K0', 'K1', 'K2', 'K3', 'K4', 'K5'],
                    'A': ['A0', 'A1', 'A2', 'A3', 'A4', 'A5']})
 
