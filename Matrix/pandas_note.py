@@ -46,6 +46,8 @@ print(df.iloc[0])  # returns pd.Series
 
 print(list(df.iloc[0]))  # [2012, 55]
 
+# pd.Series.map: apply changes on each entry in pd.Series
+# returns a new pd.Series object
 print(df[df['year'].map(lambda row: row in {2013, 2014})])
 '''
        year  sale
