@@ -27,7 +27,8 @@ async def send_req(idx, url):
     print("Send a request to {}..., idx = {}".format(url, idx))
     # register a new event: requests.get(url) ends;
     # executor=None: run in the default loop's executor,
-    # so the concurrency level is not limited by the threadpool size (see my_async3.py)
+    # so the concurrency level is not limited by the threadpool size
+    # (see http_async_thread_executor_blocking.py)
     res = await loop.run_in_executor(None, requests.get, url)
     # callback:
     _diff = time.time() - _st
