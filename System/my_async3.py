@@ -60,6 +60,7 @@ for i in range(num_of_req):
     task = loop.create_task(send_req(i, url))
     tasks.append(task)
 
+# blocking
 loop.run_until_complete(asyncio.wait(tasks))
 
 # 2) Executing normal tasks after finishing the asyncio tasks
