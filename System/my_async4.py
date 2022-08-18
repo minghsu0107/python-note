@@ -1,7 +1,7 @@
 import concurrent.futures
 import asyncio
 import json
-#import aiohttp
+import aiohttp
 import requests
 import logging
 import os
