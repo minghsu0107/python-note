@@ -1,10 +1,10 @@
 from enum import Enum
 class Color(Enum):
-    RED = 1
-    GREEN = 2
-    BLUE = 3
+    RED = 'red'
+    GREEN = 'green'
+    BLUE = 'blue'
 
-# Color.RED
-print(Color.RED)
-# 1
-print(Color.RED.value)
+print(Color.RED) # Color.RED
+print(Color.RED.value) # red
+my_color = 'red'
+print(Color(my_color).value) # red
