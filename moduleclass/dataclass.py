@@ -23,7 +23,8 @@ class ShopAddrMap:
 @dataclass_json(letter_case=LetterCase.CAMEL)
 @dataclass
 class Shop:
-    name: str 
+    name: str
+    # should be optional field if its value may be None
     addr_map: Optional[Dict[str, str]] = field(
         default_factory=dict,
         metadata=config(
