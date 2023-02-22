@@ -59,3 +59,11 @@ def timing(f):
               (f.__name__, (time2 - time1) * 1000.0))
         return ret
     return wrap
+
+@timing
+def run():
+    for i in range(1000):
+        continue
+
+run()
+
