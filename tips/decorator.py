@@ -1,9 +1,12 @@
 # a decorator adds additional function to the original function
 import time
+from functools import wraps
 
 
+# use functools.wraps to keep foo.__name__ and foo.__doc__
 def use_logging(level):
     def decorator(func):
+        @wraps(func)
         def wrapper(*args, **kwargs):
             if level == "a":
                 print("level a")
@@ -14,18 +17,15 @@ def use_logging(level):
 
     return decorator
 
-
 @use_logging(level="a")  # pass parameter to the decorator
 def foo(name='foo'):
     print("i am %s" % name)
 
-
 foo()
 '''
 level a
-i =am foo
+i am foo
 '''
-
 
 class Foo(object):
     def __init__(self, func):
@@ -36,11 +36,9 @@ class Foo(object):
         self._func()
         print('class decorator ending')
 
-
 @Foo
 def bar():
     print('bar')
-
 
 bar()
 '''
@@ -49,8 +47,8 @@ bar
 class decorator ending
 '''
 
-
 def timing(f):
+    @wraps(f)
     def wrap(*args, **kwargs):
         time1 = time.time()
         ret = f(*args)
@@ -66,4 +64,3 @@ def run():
         continue
 
 run()
-
