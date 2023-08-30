@@ -32,7 +32,7 @@ dtype: int64
 Name: sale, dtype: int64
 '''
 print(df[df['month'] >= 4]['sale'].values) # python list
-print(df[df['year'].isin([2014])])
+print(df[df['year'].isin([2014])]) # return pd.DataFrame
 '''
    month  year  sale
 1      4  2014    40
