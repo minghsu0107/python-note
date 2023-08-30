@@ -1,6 +1,16 @@
 import numpy as np
 import pandas as pd
 
+# mydf = pd.read_csv("mydf.csv", index_col="myindexcol")
+
+s1 = pd.Series([4, 5, 6], index=["one", "two", "three"])
+print(s1[s1 > 4])
+'''
+two      5
+three    6
+dtype: int64
+'''
+
 df = pd.DataFrame({'pre_month': [1, 4, 7, 10],
                    'pre_year': [2012, 2014, 2013, 2014],
                    'pre_sale': [55, 40, 84, 31]})
@@ -12,8 +22,7 @@ df = pd.DataFrame({'pre_month': [1, 4, 7, 10],
 3         10      2014        31
 '''
 
-df.columns = df.columns.str.replace('^pre_', '')
-
+df.columns = df.columns.str.replace('^pre_', '', regex=True)
 print(df[df['year'].isin([2014])])
 '''
    month  year  sale
@@ -33,6 +42,7 @@ print(df.loc[10]['year'])  # 2014
 print(df.loc[10, 'year'])  # 2014
 
 ser = df.loc[[4, 7], 'year']  # returns pd.Series (it's iterable)
+print(ser)
 '''
 month
 4     2014
@@ -51,7 +61,7 @@ print(list(df.iloc[0]))  # [2012, 55]
 print(df[df['year'].map(lambda row: row in {2013, 2014})])
 '''
        year  sale
-month            
+month
 4      2014    40
 7      2013    84
 10     2014    31
