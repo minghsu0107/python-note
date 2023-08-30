@@ -23,6 +23,15 @@ df = pd.DataFrame({'pre_month': [1, 4, 7, 10],
 '''
 
 df.columns = df.columns.str.replace('^pre_', '', regex=True)
+print(df[df['month'] >= 4]['sale']) # return pd.Series
+'''
+dtype: int64
+1    40
+2    84
+3    31
+Name: sale, dtype: int64
+'''
+print(df[df['month'] >= 4]['sale'].values) # python list
 print(df[df['year'].isin([2014])])
 '''
    month  year  sale
