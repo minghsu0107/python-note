@@ -59,11 +59,42 @@ month
 Name: year, dtype: int64
 '''
 print(ser[7])  # 2013
+ser2 = df.loc[[4, 7], :] # return pd.DataFrame
+print(ser2)
+'''
+       year  sale
+month            
+4      2014    40
+7      2013    84
+'''
 
 print(df.iloc[0]['year'])  # 2012
-print(df.iloc[0])  # returns pd.Series
-
+print(df.iloc[0][['year', 'sale']])  # returns pd.Series (with columns 'year' and 'sale')
+print(df.iloc[0])  # returns pd.Series (with all columns)
+'''
+year    2012
+sale      55
+Name: 1, dtype: int64
+'''
+print(df.iloc[0][:])  # equivalent to df.iloc[0]
 print(list(df.iloc[0]))  # [2012, 55]
+print(df['year']) # returns pd.Series
+'''
+month
+1     2012
+4     2014
+7     2013
+10    2014
+Name: year, dtype: int64
+'''
+print(df.iloc[1:]['year']) # returns pd.Series
+'''
+month
+4     2014
+7     2013
+10    2014
+Name: year, dtype: int64
+'''
 
 # pd.Series.map: apply changes on each entry in pd.Series
 # returns a new pd.Series object
@@ -75,12 +106,43 @@ month
 7      2013    84
 10     2014    31
 '''
+print(df.sort_values('year', key=lambda x: x + 1, ascending=False))
+print(df['sale'].unique()) # return np.array of unique values
+print(df['sale'].value_counts()) # return pd.Series
+
+
+
+print(df[['year', 'sale']].groupby('year').agg(sum))
+# aggregate all colmns
+ag = df.groupby('year').agg(min) # return pd.DataFrame
+print(ag.loc[2014, 'sale']) # 31
+# aggregate only the 'sale' column
+ag2 = df.groupby('year')['sale'].agg(min) # return pd.Series
+print(ag2.loc[2014]) # 31
+
+def custom_max(series):
+    return np.max(series)
+print(df.groupby('year')['sale'].agg(['min', 'max', custom_max]))
 
 df = pd.DataFrame({'key': ['K0', 'K1', 'K2', 'K3', 'K4', 'K5'],
                    'A': ['A0', 'A1', 'A2', 'A3', 'A4', 'A5']})
 
 other = pd.DataFrame({'key': ['K0', 'K1', 'K2'],
                       'B': ['B0', 'B1', 'B2']})
+
+# add extra column
+df['extra'] = pd.Series(["xx" for i in range(6)])
+# rename column
+df = df.rename(columns={"extra":"new_extra"})
+# drop column
+df = df.drop("new_extra", axis="columns")
+print(df.sample(3).iloc[:, 1:]) # return pd.DataFrame
+'''
+    A
+4  A4
+2  A2
+5  A5
+'''
 
 # use join when you want to join by index
 # DataFrame.join(self, other, on=None, how='left', lsuffix='', rsuffix='', sort=False) -> DataFrame
@@ -238,7 +300,7 @@ employee_contrib = employee_contrib.fillna({'sales': 0})
 employee_contrib['%_of_sales'] = employee_contrib['sales'] / \
     employee_contrib['sales_region']
 print(employee_contrib[['region', 'sales', '%_of_sales']]
-      .sort_values(by=['region', '%_of_sales']))
+      .sort_values(by=['region', '%_of_sales'], ascending=True))
 '''
        region  sales  %_of_sales
 Mo       East    0.0    0.000000
