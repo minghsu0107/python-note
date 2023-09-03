@@ -3,6 +3,11 @@ import pandas as pd
 
 # mydf = pd.read_csv("mydf.csv", index_col="myindexcol")
 
+ser = pd.Series([1, 2], dtype='int32')
+print(ser.dtype) # int32
+ser = ser.astype('string')
+print(ser.dtype)  # string
+
 s1 = pd.Series([4, 5, 6], index=["one", "two", "three"])
 print(s1[s1 > 4])
 '''
