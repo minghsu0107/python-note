@@ -68,7 +68,7 @@ ser2 = df.loc[[4, 7], :] # return pd.DataFrame
 print(ser2)
 '''
        year  sale
-month            
+month
 4      2014    40
 7      2013    84
 '''
@@ -113,7 +113,7 @@ month
 '''
 print(df.sort_values('year', key=lambda x: x + 1, ascending=False))
 print(df['sale'].unique()) # return np.array of unique values
-print(df['sale'].value_counts()) # return pd.Series
+print(df['sale'].value_counts()) # return pd.Series (frequencies are sorted in descending order)
 
 
 
@@ -123,7 +123,12 @@ ag = df.groupby('year').agg(min) # return pd.DataFrame
 print(ag.loc[2014, 'sale']) # 31
 # aggregate only the 'sale' column
 ag2 = df.groupby('year')['sale'].agg(min) # return pd.Series
+# ag2 = df.groupby('year')['sale'].min() # the same as above
 print(ag2.loc[2014]) # 31
+
+# unlike agg(), the column we grouped on does NOT become the index
+ag3 = df.groupby('year').filter(lambda x: x['sale'].max() > 70) # return pd.DataFrame ()
+print(ag3)
 
 def custom_max(series):
     return np.max(series)
@@ -315,4 +320,39 @@ Ellen   South  101.0    0.333333
 Sally   South  202.0    0.666667
 Carl     West    0.0    0.000000
 Tony     West  103.0    1.000000
+'''
+
+df = pd.DataFrame({"A": ["foo", "foo", "foo", "foo", "foo",
+                         "bar", "bar", "bar", "bar"],
+                   "B": ["one", "one", "one", "two", "two",
+                         "one", "one", "two", "two"],
+                   "C": ["small", "large", "large", "small",
+                         "small", "large", "small", "small",
+                         "large"],
+                   "D": [1, 2, 2, 3, 3, 4, 5, 6, 7],
+                   "E": [2, 4, 5, 5, 6, 6, 8, 9, 9]})
+# fill missing values
+pt = pd.pivot_table(df, values=['D'], index=['A', 'B'],
+                       columns=['C'], aggfunc=np.sum, fill_value=0)
+print(pt)
+'''
+C       large small
+A   B              
+bar one     4     5
+    two     7     6
+foo one     4     1
+    two     0     6
+'''
+pt = pd.pivot_table(df, values=['D', 'E'], index=['A', 'C'],
+                       aggfunc={'D': "mean",
+                                'E': ["min", "max", "mean"]})
+print(pt)
+'''
+                  D   E              
+               mean max      mean min
+A   C                                
+bar large  5.500000   9  7.500000   6
+    small  5.500000   9  8.500000   8
+foo large  2.000000   5  4.500000   4
+    small  2.333333   6  4.333333   2
 '''
