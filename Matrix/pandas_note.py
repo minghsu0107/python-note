@@ -127,8 +127,13 @@ ag2 = df.groupby('year')['sale'].agg(min) # return pd.Series
 print(ag2.loc[2014]) # 31
 
 # unlike agg(), the column we grouped on does NOT become the index
-ag3 = df.groupby('year').filter(lambda x: x['sale'].max() > 70) # return pd.DataFrame ()
+ag3 = df.groupby('year').filter(lambda x: x['sale'].max() > 70) # return pd.DataFrame
 print(ag3)
+'''
+       year  sale
+month
+7      2013    84
+'''
 
 def custom_max(series):
     return np.max(series)
