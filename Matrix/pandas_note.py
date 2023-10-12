@@ -135,6 +135,25 @@ month
 7      2013    84
 '''
 
+ag4 = df.groupby('year').size() # returns pd.Series
+print(ag4)
+'''
+year
+2012    1
+2013    1
+2014    2
+dtype: int64
+'''
+ag5 = df.groupby('year').count() # get count on all columns, return pd.DataFrame
+print(ag5)
+'''
+      sale
+year
+2012     1
+2013     1
+2014     2
+'''
+
 def custom_max(series):
     return np.max(series)
 print(df.groupby('year')['sale'].agg(['min', 'max', custom_max]))
@@ -342,7 +361,7 @@ pt = pd.pivot_table(df, values=['D'], index=['A', 'B'],
 print(pt)
 '''
 C       large small
-A   B              
+A   B
 bar one     4     5
     two     7     6
 foo one     4     1
@@ -353,9 +372,9 @@ pt = pd.pivot_table(df, values=['D', 'E'], index=['A', 'C'],
                                 'E': ["min", "max", "mean"]})
 print(pt)
 '''
-                  D   E              
+                  D   E
                mean max      mean min
-A   C                                
+A   C
 bar large  5.500000   9  7.500000   6
     small  5.500000   9  8.500000   8
 foo large  2.000000   5  4.500000   4
