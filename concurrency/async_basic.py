@@ -40,33 +40,32 @@ def test():
     # finish example1 coroutine (idx: 2)
 
 # the following uses high-level api
-async def test2():
+def test2():
     import asyncio
 
     async def example1(idx):
-        print(f"Start example1 coroutine (idx: {idx})")
+        print(f"Start example1 coroutine (idx: {idx})") 
         await asyncio.sleep(1)
         print(f"finish example1 coroutine (idx: {idx})")
         return f'example 1, res: {idx}'
 
     async def example2(idx):
         print(f"Start example2 coroutine (idx: {idx})")
-        print(f"finish example2 coroutine (idx: {idx})")
+        print(f"finish example2 coroutine (idx: {idx})") 
         return f'example 2, res: {idx}'
 
     tasks = [
         example1(1),
-        example1(2),
+        example1(2), 
         example2(1),
         example2(2)
     ]
-    # returns a list of results (same order as registered tasks)
-    res = await asyncio.gather(*tasks)
-
-    print(res)
+    return tasks
 
 
 if __name__ == "__main__":
     # test()
-    # ['example 1, res: 1', 'example 1, res: 2', 'example 2, res: 1', 'example 2, res: 2']
-    asyncio.run(test2())
+    tasks = test2()
+    # returns a list of results (same order as registered tasks)
+    res = asyncio.run(asyncio.gather(*tasks))  
+    print(res) # ['example 1, res: 1', 'example 1, res: 2', 'example 2, res: 1', 'example 2, res: 2']
