@@ -1,8 +1,10 @@
+import asyncio
+
+
 # 協程可以看做是"能在中途中斷、中途返回值給其他協程、中途恢復、中途傳入參數的函數"
 
 # the following uses low-level api
 def test():
-    import asyncio
     loop = asyncio.get_event_loop()  # 建立一個Event Loop
 
     async def example1(idx):  # 定義一個中間會被中斷的協程
