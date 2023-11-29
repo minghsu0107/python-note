@@ -1,7 +1,6 @@
 # 協程可以看做是"能在中途中斷、中途返回值給其他協程、中途恢復、中途傳入參數的函數"
 
-# loop.run_forever()
-# 這個函數一執行，Event Loop就會永遠執行不會被關閉，除非在程式中出現loop.stop()就停止
+# the following uses low-level api
 def test():
     import asyncio
     loop = asyncio.get_event_loop()  # 建立一個Event Loop
@@ -40,10 +39,9 @@ def test():
     # finish example1 coroutine (idx: 1)
     # finish example1 coroutine (idx: 2)
 
-
+# the following uses high-level api
 def test2():
     import asyncio
-    loop = asyncio.get_event_loop()
 
     async def example1(idx):
         print(f"Start example1 coroutine (idx: {idx})")
@@ -63,8 +61,7 @@ def test2():
         example2(2)
     ]
     # returns a list of results (same order as registered tasks)
-    res = loop.run_until_complete(asyncio.gather(*tasks))
-    loop.close()
+    res = asyncio.run(asyncio.gather(*tasks))
 
     return res
 
