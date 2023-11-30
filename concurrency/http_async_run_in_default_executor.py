@@ -5,9 +5,6 @@ import time
 import asyncio
 import threading
 
-loop = asyncio.get_event_loop()
-url = 'https://www.google.com.tw/'
-
 
 class Timer:
     def __init__(self, do_start=True):
@@ -22,7 +19,7 @@ class Timer:
         return self.et - self.st
 
 
-async def send_req(idx, url):
+async def send_req(loop, idx, url):
     _st = time.time()
     print("Send a request to {}..., idx = {}".format(url, idx))
     # register a new event: requests.get(url) ends;
@@ -43,30 +40,35 @@ def other_tasks():
     print("Other task took {:.01f} second(s).".format(_diff))
 
 
-num_of_req = 10
-timer = Timer()
+def main():
+    loop = asyncio.get_event_loop()
+    url = 'https://www.google.com.tw/'
+    num_of_req = 10
+    timer = Timer()
 
-# 1) Let high IO tasks be handled in asyncio way
-tasks = []
-for i in range(num_of_req):
-    task = loop.create_task(send_req(i, url))
-    tasks.append(task)
+    # 1) Let high IO tasks be handled in asyncio way
+    tasks = []
+    for i in range(num_of_req):
+        task = loop.create_task(send_req(loop, i, url))
+        tasks.append(task)
 
-# run event loop in another thread
-future_thd = threading.Thread(
-    target=loop.run_until_complete, args=(asyncio.wait(tasks),))
-future_thd.start()
+    # run event loop in another thread
+    future_thd = threading.Thread(
+        target=loop.run_until_complete, args=(asyncio.gather(*tasks),))
+    future_thd.start()
 
-# 2) Executing normal tasks while waiting the asyncio tasks
-# since loop.run_until_complete runs in another thread, it will not block the main thread
-for i in range(num_of_req):
-    other_tasks()
+    # 2) Executing normal tasks while waiting the asyncio tasks
+    # since loop.run_until_complete runs in another thread, it will not block the main thread
+    for i in range(num_of_req):
+        other_tasks()
+
+    # 3) Wait for thread of asyncio tasks to complete
+    future_thd.join()
+
+    loop.close()
+    print("After {} request(s), {:.02f} second(s) passed!".format(
+        num_of_req, timer.end()))
 
 
-# 3) Wait for thread of asyncio tasks to complete
-future_thd.join()
-
-
-loop.close()
-print("After {} request(s), {:.02f} second(s) passed!".format(
-    num_of_req, timer.end()))
+if __name__ == "__main__":
+    main()

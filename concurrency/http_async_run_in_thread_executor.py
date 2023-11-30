@@ -5,15 +5,6 @@ import time
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
 
-loop = asyncio.get_event_loop()
-url = 'https://www.google.com.tw/'
-
-# 5 threads: concurrency level = 5
-# if only 1 thread, the response will be handled sequentially (blockingly) from idx 0 to num_of_req
-# even though we register the task in a non-blocking manner
-# this is because other tasks will be idled until at least 1 thread in the pool finishes its task
-_executor = ThreadPoolExecutor(5)
-
 
 class Timer:
     def __init__(self, do_start=True):
@@ -28,7 +19,7 @@ class Timer:
         return self.et - self.st
 
 
-async def send_req(idx, url):
+async def send_req(loop, executor, idx, url):
     _st = time.time()
     print("Send a request to {}..., idx = {}".format(url, idx))
     # register a new event: requests.get(url) ends;
@@ -37,7 +28,7 @@ async def send_req(idx, url):
     s = requests.Session()
     # headers = {'content-type': 'application/json'}
     # s.headers.update(headers)
-    res = await loop.run_in_executor(_executor, s.get, url)
+    res = await loop.run_in_executor(executor, s.get, url)
     # callback:
     _diff = time.time() - _st
     print(
@@ -51,23 +42,35 @@ def other_tasks():
     print("Other task took {:.01f} second(s).".format(_diff))
 
 
-num_of_req = 10
-timer = Timer()
+def main():
+    loop = asyncio.get_event_loop()
+    url = 'https://www.google.com.tw/'
+    num_of_req = 10
+    timer = Timer()
 
-# 1) Let high IO tasks be handled in asyncio way
-tasks = []
-for i in range(num_of_req):
-    task = loop.create_task(send_req(i, url))
-    tasks.append(task)
+    # 5 threads: concurrency level = 5
+    # if only 1 thread, the response will be handled sequentially (blockingly) from idx 0 to num_of_req
+    # even though we register the task in a non-blocking manner
+    # this is because other tasks will be idled until at least 1 thread in the pool finishes its task
+    executor = ThreadPoolExecutor(5)
 
-# blocking
-loop.run_until_complete(asyncio.wait(tasks))
+    # 1) Let high IO tasks be handled in asyncio way
+    tasks = []
+    for i in range(num_of_req):
+        task = loop.create_task(send_req(loop, executor, i, url))
+        tasks.append(task)
 
-# 2) Executing normal tasks after finishing the asyncio tasks
-for i in range(num_of_req):
-    other_tasks()
+    # blocking
+    loop.run_until_complete(asyncio.gather(*tasks))
+
+    # 2) Executing normal tasks after finishing the asyncio tasks
+    for i in range(num_of_req):
+        other_tasks()
+
+    loop.close()
+    print("After {} request(s), {:.02f} second(s) passed!".format(
+        num_of_req, timer.end()))
 
 
-loop.close()
-print("After {} request(s), {:.02f} second(s) passed!".format(
-    num_of_req, timer.end()))
+if __name__ == "__main__":
+    main()

@@ -5,7 +5,7 @@ import aiohttp
 import requests
 import logging
 import os
-#from dotenv import load_dotenv
+# from dotenv import load_dotenv
 # load_dotenv()
 
 
@@ -78,6 +78,4 @@ async def main():
         logging.error(e)
 
 if __name__ == '__main__':
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(main())
-    loop.close()
+    asyncio.run(main())
