@@ -19,7 +19,7 @@ async def main():
     tasks.append(asyncio.create_task(coroutine1()))
     tasks.append(asyncio.create_task(coroutine2()))
 
-
+    # the order of result values is preserved
     results = await asyncio.gather(*tasks, return_exceptions=True)
     print(f'results: {results}')
 
