@@ -22,7 +22,6 @@ class Timer:
 async def send_req(loop, idx, url):
     _st = time.time()
     print("Send a request to {}..., idx = {}".format(url, idx))
-    # register a new event: requests.get(url) ends;
     # executor=None: run in the loop's default thread pool executor
     # default thread pool size: os.cpu_count() * 5
     res = await loop.run_in_executor(None, requests.get, url)
