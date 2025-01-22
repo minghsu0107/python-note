@@ -22,7 +22,6 @@ class Timer:
 async def send_req(loop, executor, idx, url):
     _st = time.time()
     print("Send a request to {}..., idx = {}".format(url, idx))
-    # register a new event: requests.get(url) ends;
     # python雖然因為GIL，並不能用多核心來同時跑多個線程，
     # 但線程並不會被網路io所阻塞，所以loop.run_in_executor利用這個特性把request.get包裝成一個非阻塞的Future對象
     s = requests.Session()
