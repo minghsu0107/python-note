@@ -15,7 +15,7 @@ def main():
         p.close()
         p.join()
 
-    print(res)
+    print(res) # [0, 2, 4, 6, 8, 10, 12, 14, 16, 18]
 
 
 def main2():
