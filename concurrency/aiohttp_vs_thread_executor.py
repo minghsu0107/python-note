@@ -43,8 +43,8 @@ def blockingRequest(payload: dict):
 
 
 def run_block():
+    futures = []
     with concurrent.futures.ThreadPoolExecutor() as executor:
-        futures = []
         for i in range(10):
             payload = {}
             mylist = ['hello', 'world']
@@ -55,6 +55,9 @@ def run_block():
         # output may be ordered differently
         for future in concurrent.futures.as_completed(futures):
             print(future.result())
+    # ordered results
+    for future in futures:
+        print(future.result())
 
 
 async def main():
