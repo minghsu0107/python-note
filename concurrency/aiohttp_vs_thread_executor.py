@@ -41,7 +41,7 @@ def blockingRequest(payload: dict):
 
 def run_block():
     futures = []
-    with concurrent.futures.ThreadPoolExecutor() as executor:
+    with concurrent.futures.ThreadPoolExecutor(5) as executor:
         for i in range(10):
             payload = {}
             mylist = ['hello', 'world']
@@ -78,4 +78,5 @@ async def main():
         logging.error(e)
 
 if __name__ == '__main__':
+    # run_block()
     asyncio.run(main())
