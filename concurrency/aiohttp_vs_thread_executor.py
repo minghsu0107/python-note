@@ -5,12 +5,9 @@ import aiohttp
 import requests
 import logging
 import os
-# from dotenv import load_dotenv
-# load_dotenv()
 
 
 API_ENTPOINT = os.getenv('API_ENTPOINT')
-API_ENTPOINT = 'http://www.google.com'
 
 
 def blockingRequest(payload: dict):
@@ -53,8 +50,8 @@ def run_block():
             payload['other'] = mydict
             futures.append(executor.submit(blockingRequest, payload=payload))
         # output may be ordered differently
-        for future in concurrent.futures.as_completed(futures):
-            print(future.result())
+        # for future in concurrent.futures.as_completed(futures):
+        #     print(future.result())
     # ordered results
     for future in futures:
         print(future.result())
