@@ -32,6 +32,7 @@ async def send_req(loop, executor, idx, url):
     _diff = time.time() - _st
     print(
         "Receive a response for {:.02f} second(s). idx = {}, res = {}".format(_diff, idx, res))
+    return idx
 
 
 def other_tasks():
@@ -60,7 +61,8 @@ def main():
         tasks.append(task)
 
     # blocking
-    loop.run_until_complete(asyncio.gather(*tasks))
+    results = loop.run_until_complete(asyncio.gather(*tasks))
+    print(results) # [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
     # 2) Executing normal tasks after finishing the asyncio tasks
     for i in range(num_of_req):
