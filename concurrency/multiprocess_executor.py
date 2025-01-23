@@ -51,3 +51,5 @@ if __name__ == '__main__':
         sorted_lists_futures = [executor.submit(
             merge_sort, r_list) for r_list in r_lists]
     logging.info("Sorting Completed")
+    for future in sorted_lists_futures:
+        print(future.result())
