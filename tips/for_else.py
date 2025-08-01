@@ -2,10 +2,10 @@ n = int(input("please enter a number"))
 if (n == 2):
     print("2 is a prime number!")
 else:
-	for i in range(2, n):
-		if (n % i == 0):
-		   print("{} is not a prime number!".format(n))
-		   break
+    for i in range(2, n):
+        if (n % i == 0):
+	    print("{} is not a prime number!".format(n))
+	    break
     else:
         print("{} is a prime number!".format(n))
 
